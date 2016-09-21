@@ -1,0 +1,11 @@
+FROM {{ image_spec("openstack-base") }}
+MAINTAINER {{ maintainer }}
+
+{{ copy_sources("openstack/sahara", "/sahara") }}
+
+RUN apt install -y openssh-client \
+    && useradd --user-group sahara \
+    && /var/lib/microservices/venv/bin/pip install --upgrade pymemcache /sahara \
+    && mkdir -p /etc/sahara \
+    && cp -r /sahara/etc/sahara/* /etc/sahara \
+    && chown -R sahara:sahara /etc/sahara
