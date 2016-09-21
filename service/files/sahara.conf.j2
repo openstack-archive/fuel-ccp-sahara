@@ -1,0 +1,29 @@
+[DEFAULT]
+debug = {{ sahara.debug }}
+
+use_syslog = false
+use_stderr = true
+
+host = {{ network_topology["private"]["address"] }}
+port = {{ sahara.port }}
+
+periodic_coordinator_backend_url = memcached://{{ address("memcached") }}:{{ memcached.port }}
+transport_url = rabbit://{{ rabbitmq_user }}:{{ rabbitmq_password }}@{{ address("rabbitmq") }}:{{ rabbitmq_port }}/
+
+[database]
+connection = mysql+pymysql://{{ sahara.db.username }}:{{ sahara.db.password }}@{{ address("mariadb") }}/{{ sahara.db.name }}
+max_retries = -1
+
+[keystone_authtoken]
+auth_uri = http://{{ address("keystone") }}:{{ keystone.public_port }}
+auth_url = http://{{ address("keystone") }}:{{ keystone.admin_port }}
+auth_type = password
+project_domain_id = default
+user_domain_id = default
+project_name = {{ openstack.project_name }}
+username = {{ sahara.auth.user }}
+password = {{ sahara.auth.password }}
+memcached_servers = {{ address("memcached") }}:{{ memcached.port }}
+
+[oslo_messaging_notifications]
+driver = noop
