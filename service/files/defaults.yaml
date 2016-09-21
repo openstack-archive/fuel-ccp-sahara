@@ -1,0 +1,16 @@
+configs:
+  sahara_api_port: 8386
+
+  sahara_db_username: sahara
+  sahara_db_password: password
+  sahara_db_name: sahara
+
+  sahara_user: sahara
+  sahara_password: password
+
+  sahara_debug: false
+
+sources:
+  openstack/sahara:
+    git_url: https://github.com/openstack/sahara.git
+    git_ref: newton
