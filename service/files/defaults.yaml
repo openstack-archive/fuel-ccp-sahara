@@ -1,0 +1,27 @@
+configs:
+  sahara:
+    debug: false
+    port: 8386
+
+    plugins:
+      - fake
+      - vanilla
+      - spark
+      - cdh
+      - ambari
+      - storm
+      - mapr
+
+    auth:
+      user: sahara
+      password: password
+
+    db:
+      username: sahara
+      password: password
+      name: sahara
+
+sources:
+  openstack/sahara:
+    git_url: https://github.com/openstack/sahara.git
+    git_ref: stable/newton
