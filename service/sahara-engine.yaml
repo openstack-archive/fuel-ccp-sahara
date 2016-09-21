@@ -1,0 +1,18 @@
+service:
+  name: sahara-engine
+  containers:
+    - name: sahara-engine
+      image: sahara-engine
+      # TODO(sreshetniak): add probes
+      daemon:
+        files:
+          - sahara-conf
+        dependencies:
+          - rabbitmq
+          - sahara-api
+        command: sahara-engine --config-file /etc/sahara/sahara.conf
+
+files:
+  sahara-conf:
+    path: /etc/sahara/sahara.conf
+    content: sahara.conf.j2

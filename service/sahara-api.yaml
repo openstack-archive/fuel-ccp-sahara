@@ -1,0 +1,64 @@
+service:
+  name: sahara-api
+  ports:
+    - {{ sahara.port }}
+  containers:
+    - name: sahara-api
+      image: sahara-api
+      # TODO(sreshetniak): add probes
+      pre:
+        - name: sahara-db-create
+          dependencies:
+            - {{ service.database }}
+          type: single
+          command:
+            mysql -u root -p{{ db.root_password }} -h {{ address(service.database) }} -e "create database {{ sahara.db.name }};
+            grant all privileges on {{ sahara.db.name }}.* to '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}';"
+        - name: sahara-db-sync
+          files:
+            - sahara-conf
+          dependencies:
+            - sahara-db-create
+          type: single
+          command: sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head
+        - name: sahara-user-create
+          dependencies:
+            - keystone
+          type: single
+          command: openstack user create --domain default --password {{ sahara.auth.password  }} {{ sahara.auth.user }}
+        - name: sahara-role-add
+          dependencies:
+            - sahara-user-create
+          type: single
+          command: openstack role add --project {{ openstack.project_name }} --user {{ sahara.auth.user }} admin
+        - name: sahara-service-create
+          dependencies:
+            - keystone
+          type: single
+          command: openstack service create --name sahara --description "OpenStack Data Processing service" data-processing
+        - name: sahara-public-endpoint-create
+          dependencies:
+            - sahara-service-create
+          type: single
+          command: openstack endpoint create --region RegionOne data-processing public http://{{ address("sahara-api", sahara.port, external=True) }}/v1.1/\$\(tenant_id\)s
+        - name: sahara-internal-endpoint-create
+          dependencies:
+            - sahara-service-create
+          type: single
+          command: openstack endpoint create --region RegionOne data-processing internal http://{{ address("sahara-api") }}:{{ sahara.port.cont }}/v1.1/\$\(tenant_id\)s
+        - name: sahara-admin-endpoint-create
+          dependencies:
+            - sahara-service-create
+          type: single
+          command: openstack endpoint create --region RegionOne data-processing admin http://{{ address("sahara-api") }}:{{ sahara.port.cont }}/v1.1/\$\(tenant_id\)s
+      daemon:
+        files:
+          - sahara-conf
+        dependencies:
+          - rabbitmq
+        command: sahara-api --config-file /etc/sahara/sahara.conf
+
+files:
+  sahara-conf:
+    path: /etc/sahara/sahara.conf
+    content: sahara.conf.j2
