@@ -46,12 +46,12 @@ service:
           dependencies:
             - sahara-service-create
           type: single
-          command: openstack endpoint create --region RegionOne data-processing internal http://{{ address("sahara-api", sahara.port, with_scheme=True) }}/v1.1/\$\(tenant_id\)s
+          command: openstack endpoint create --region RegionOne data-processing internal {{ address("sahara-api", sahara.port, with_scheme=True) }}/v1.1/\$\(tenant_id\)s
         - name: sahara-admin-endpoint-create
           dependencies:
             - sahara-service-create
           type: single
-          command: openstack endpoint create --region RegionOne data-processing admin http://{{ address("sahara-api", sahara.port, with_scheme=True) }}/v1.1/\$\(tenant_id\)s
+          command: openstack endpoint create --region RegionOne data-processing admin {{ address("sahara-api", sahara.port, with_scheme=True) }}/v1.1/\$\(tenant_id\)s
       daemon:
         files:
           - sahara-conf
