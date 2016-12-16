@@ -13,6 +13,8 @@ port = {{ sahara.port.cont }}
 periodic_coordinator_backend_url = memcached://{{ address("memcached", memcached.port) }}
 transport_url = rabbit://{{ rabbitmq.user }}:{{ rabbitmq.password }}@{{ address("rabbitmq", rabbitmq.port) }}/
 
+heat_enable_wait_condition = {{ sahara.enable_wait_condition }}
+
 [database]
 connection = mysql+pymysql://{{ sahara.db.username }}:{{ sahara.db.password }}@{{ address(service.database) }}/{{ sahara.db.name }}
 max_retries = -1

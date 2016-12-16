@@ -1,6 +1,7 @@
 configs:
   sahara:
     debug: false
+    enable_wait_condition: false
     port:
       cont: 8386
       ingress: data-processing
