@@ -14,7 +14,10 @@ service:
           type: single
           command:
             mysql -u root -p{{ db.root_password }} -h {{ address(service.database) }} -e "create database {{ sahara.db.name }};
-            grant all privileges on {{ sahara.db.name }}.* to '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}';"
+            create user '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}'
+            {% if percona.tls.enabled and security.tls.enabled %} require ssl {% endif %};
+            grant all privileges on {{ sahara.db.name }}.* to '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}'
+            {% if percona.tls.enabled and security.tls.enabled %} require ssl {% endif %};"
         - name: sahara-db-sync
           files:
             - sahara-conf
