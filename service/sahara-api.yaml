@@ -24,14 +24,14 @@ service:
           command: sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head
         - name: sahara-user-create
           dependencies:
-            - keystone
+            - keystone-create-domain
           type: single
-          command: openstack user create --domain default --password {{ sahara.auth.password  }} {{ sahara.auth.user }}
+          command: openstack user create --domain {{ service_account.domain }} --password {{ sahara.auth.password  }} {{ sahara.auth.user }}
         - name: sahara-role-add
           dependencies:
             - sahara-user-create
           type: single
-          command: openstack role add --project {{ openstack.project_name }} --user {{ sahara.auth.user }} admin
+          command: openstack role add --domain {{ service_account.domain }} --user {{ sahara.auth.user }} admin
         - name: sahara-service-create
           dependencies:
             - keystone
