@@ -1,0 +1,11 @@
+Code-Review+1: Evgeny Sikachev <esikachev@mirantis.com>
+Verified+1: Mirantis CCP CI <mirantis-fuel-ccp-ci@mirantis.com>
+Code-Review+2: Proskurin Kirill <kproskurin@mirantis.com>
+Code-Review+2: Andrey Pavlov <apavlov@mirantis.com>
+Workflow+1: Andrey Pavlov <apavlov@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 15 Feb 2017 20:00:03 +0000
+Reviewed-on: https://review.openstack.org/433076
+Project: openstack/fuel-ccp-sahara
+Branch: refs/heads/master
