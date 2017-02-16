@@ -1,0 +1,11 @@
+Code-Review+1: Sergey Kraynev <skraynev@mirantis.com>
+Code-Review+2: Proskurin Kirill <kproskurin@mirantis.com>
+Verified+1: Mirantis CCP CI <mirantis-fuel-ccp-ci@mirantis.com>
+Code-Review+2: Artur Zarzycki <azarzycki@mirantis.com>
+Workflow+1: Proskurin Kirill <kproskurin@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 16 Feb 2017 10:18:42 +0000
+Reviewed-on: https://review.openstack.org/434780
+Project: openstack/fuel-ccp-sahara
+Branch: refs/heads/master
