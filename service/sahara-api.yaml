@@ -15,9 +15,9 @@ service:
           command:
             mysql -u root -p{{ db.root_password }} -h {{ address(service.database) }} -e "create database {{ sahara.db.name }};
             create user '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}'
-            {% if percona.tls.enabled %} require ssl {% endif %};
+            {% if db.tls.enabled %} require ssl {% endif %};
             grant all privileges on {{ sahara.db.name }}.* to '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}'
-            {% if percona.tls.enabled %} require ssl {% endif %};"
+            {% if db.tls.enabled %} require ssl {% endif %};"
         - name: sahara-db-sync
           files:
             - sahara-conf
