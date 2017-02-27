@@ -9,7 +9,6 @@ service:
         files:
           - sahara-conf
         dependencies:
-          - rabbitmq
           - sahara-api
         command: sahara-engine --config-file /etc/sahara/sahara.conf
 
