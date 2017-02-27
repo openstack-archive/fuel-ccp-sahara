@@ -1,0 +1,39 @@
+upgrade:
+  name: upgrade-sahara
+  image: sahara-upgrade
+  steps:
+    - name: backup
+      command: /opt/ccp/bin/backup.sh
+      files:
+        - backup-sh
+      volumes:
+        - name: backup-dir
+          path: /var/ccp/backup/sahara
+          type: host
+          readOnly: false
+      topology_key: backup
+    - name: kill-services
+      type: kill-services
+      services:
+        - sahara-api
+        - sahara-engine
+    - name: db-sync
+      command: sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head
+      files:
+        - sahara-conf
+    - name: roll-api
+      type: rolling-upgrade
+      services:
+        - sahara-api
+    - name: roll-engine
+      type: rolling-upgrade
+      services:
+        - sahara-engine
+files:
+  sahara-conf:
+    path: /etc/sahara/sahara.conf
+    content: sahara.conf.j2
+  backup-sh:
+    path: /opt/ccp/bin/backup.sh
+    content: backup.sh.j2
+    perm: "500"
