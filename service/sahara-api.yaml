@@ -10,10 +10,10 @@ service:
       pre:
         - name: sahara-db-create
           dependencies:
-            - {{ service.database }}
+            - database
           type: single
           command:
-            mysql -u root -p{{ db.root_password }} -h {{ address(service.database) }} -e "create database {{ sahara.db.name }};
+            mysql -u root -p{{ db.root_password }} -h {{ address("database") }} -e "create database {{ sahara.db.name }};
             create user '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}'
             {% if db.tls.enabled %} require ssl {% endif %};
             grant all privileges on {{ sahara.db.name }}.* to '{{ sahara.db.username }}'@'%' identified by '{{ sahara.db.password }}'
@@ -59,7 +59,7 @@ service:
         files:
           - sahara-conf
         dependencies:
-          - rabbitmq
+          - rpc
         command: sahara-api --config-file /etc/sahara/sahara.conf
 
 files:

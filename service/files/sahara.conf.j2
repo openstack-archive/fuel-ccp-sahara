@@ -11,12 +11,11 @@ host = {{ network_topology["private"]["address"] }}
 port = {{ sahara.port.cont }}
 
 periodic_coordinator_backend_url = memcached://{{ address("memcached", memcached.port) }}
-transport_url = rabbit://{{ rabbitmq.user }}:{{ rabbitmq.password }}@{{ address("rabbitmq", rabbitmq.port) }}/
 
 heat_enable_wait_condition = {{ sahara.enable_wait_condition }}
 
 [database]
-connection = mysql+pymysql://{{ sahara.db.username }}:{{ sahara.db.password }}@{{ address(service.database) }}/{{ sahara.db.name }}{% if db.tls.enabled %}?ssl_ca=/opt/ccp/etc/tls/ca.pem{% endif %}
+connection = mysql+pymysql://{{ sahara.db.username }}:{{ sahara.db.password }}@{{ address("database") }}/{{ sahara.db.name }}{% if db.tls.enabled %}?ssl_ca=/opt/ccp/etc/tls/ca.pem{% endif %}
 max_retries = -1
 
 {{ keystone_authtoken.keystone_authtoken(sahara.auth.user, sahara.auth.password) }}
@@ -28,3 +27,5 @@ admin_tenant_name = {{ openstack.project_name }}
 
 [oslo_messaging_notifications]
 driver = noop
+
+{{ oslo_messaging[messaging.backend.rpc]('rpc_config') }}
