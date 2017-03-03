@@ -11,8 +11,6 @@ host = {{ network_topology["private"]["address"] }}
 port = {{ sahara.port.cont }}
 
 periodic_coordinator_backend_url = memcached://{{ address("memcached", memcached.port) }}
-transport_url = rabbit://{{ rabbitmq.user }}:{{ rabbitmq.password }}@{{ address("rabbitmq", rabbitmq.port) }}/
-
 heat_enable_wait_condition = {{ sahara.enable_wait_condition }}
 
 [database]
@@ -26,5 +24,6 @@ admin_password = {{ sahara.auth.password }}
 admin_user = {{ sahara.auth.user }}
 admin_tenant_name = {{ openstack.project_name }}
 
+{{ oslo_messaging[messaging.backend.rpc]('rpc_config') }}
 [oslo_messaging_notifications]
 driver = noop
