@@ -1,5 +1,7 @@
 configs:
   sahara:
+    tls:
+      enabled: true
     debug: false
     enable_wait_condition: false
     port:

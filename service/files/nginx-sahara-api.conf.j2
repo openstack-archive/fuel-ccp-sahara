@@ -1,0 +1,9 @@
+server {
+    listen {{ network_topology["private"]["address"] }}:{{ sahara.port.cont }} ssl;
+    include common/ssl.conf;
+
+    location / {
+        proxy_pass http://sahara_api;
+        include common/proxy-headers.conf;
+    }
+}

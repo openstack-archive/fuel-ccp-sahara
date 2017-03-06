@@ -7,8 +7,48 @@ use_stderr = true
 use_neutron = true
 plugins = {{ sahara.plugins | join(',') }}
 
+{% if sahara.tls.enabled %}
+host = 127.0.0.1
+{% else %}
 host = {{ network_topology["private"]["address"] }}
+{% endif %}
 port = {{ sahara.port.cont }}
+
+{% if sahara.tls.enabled %}
+#[oslo_middleware]
+#enable_proxy_headers_parsing = true
+#
+{% endif %}
+
+{% if keystone.tls.enabled %}
+[keystone]
+ca_file = /opt/ccp/etc/tls/ca.pem
+{% endif %}
+
+{% if cinder.tls.enabled %}
+[cinder]
+ca_file = /opt/ccp/etc/tls/ca.pem
+{% endif %}
+
+{% if heat.tls.enabled %}
+[heat]
+ca_file = /opt/ccp/etc/tls/ca.pem
+{% endif %}
+
+{% if glance.tls.enabled %}
+[glance]
+ca_file = /opt/ccp/etc/tls/ca.pem
+{% endif %}
+
+{% if nova.tls.enabled %}
+[nova]
+ca_file = /opt/ccp/etc/tls/ca.pem
+{% endif %}
+
+{% if neutron.tls.enabled %}
+[neutron]
+ca_file = /opt/ccp/etc/tls/ca.pem
+{% endif %}
 
 periodic_coordinator_backend_url = memcached://{{ address("memcached", memcached.port) }}
 
@@ -23,7 +63,7 @@ max_retries = -1
 # sahara trustor user
 admin_password = {{ sahara.auth.password }}
 admin_user = {{ sahara.auth.user }}
-admin_tenant_name = {{ openstack.project_name }}
+admin_tenant_name = {{ service_account.project }}
 
 [oslo_messaging_notifications]
 driver = noop
