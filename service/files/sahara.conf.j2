@@ -23,7 +23,7 @@ max_retries = -1
 # sahara trustor user
 admin_password = {{ sahara.auth.password }}
 admin_user = {{ sahara.auth.user }}
-admin_tenant_name = {{ openstack.project_name }}
+admin_tenant_name = {{ service_account.project }}
 
 [oslo_messaging_notifications]
 driver = noop
