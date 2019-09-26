@@ -1,9 +1,0 @@
-actions:
-  - name: sahara-db-sync
-    image: sahara-base
-    dependencies:
-      - sahara-db-create
-    command: sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head
-    files:
-      - path: /etc/sahara/sahara.conf
-        content: sahara.conf.j2
